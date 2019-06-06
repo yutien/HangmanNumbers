@@ -4,14 +4,15 @@
 <div>
     <h1>Hangman Numbers</h1>
 </div>
-<button id="btnStart"><h1>Start</h1></button>
-<input id="n1" value="?" readonly></input>
-<input id="n2" value="?" readonly></input>
-<input id="n3" value="?" readonly></input>
+<BR>
+<input type="button"    class="Button"  id="btnStart"   value="Start"></input>
+<input type="text"      class="Text"    id="n1"         value="?" readonly></input>
+<input type="text"      class="Text"    id="n2"         value="?" readonly></input>
+<input type="text"      class="Text"    id="n3"         value="?" readonly></input>
 <span>=</span>
-<input id="n4" type="number"></input>
-<button id="btnOkay" disabled><h1>Okay</h1></button>
-
+<input type="text"      class="Text"    id="n4"         type="number"></input>
+<input type="button"    class="Button"  id="btnOkay"    value="Okay" disabled></input>
+<BR>
 <img id="myImg" src="v0.png">
 
 <script>
@@ -46,13 +47,13 @@ $('#btnStart').click(function(){
         }
     
         timer = setBgPosition();
-        $('#btnStart').html('<h1>Stop</h1>');
+        $('#btnStart').val('Stop');
         $('#btnOkay').prop('disabled', true);
     }
     else {
         clearInterval(timer);
         timer = null;
-        $('#btnStart').html('<h1>Start</h1>').prop('disabled', true);
+        $('#btnStart').val('Start').prop('disabled', true);
         $('#btnOkay').prop('disabled', false);
         $('#n4').focus();
     }
@@ -74,7 +75,7 @@ function WrongAnswer() {
     alert('Good try, please try again!');
     if(numberOfWrong >= 6) {
         $('#btnStart').prop('disabled', false);
-        $('#btnStart').html('<h1>Restart</h1>');
+        $('#btnStart').val('Restart');
         $('#btnOkay').prop('disabled', true);
     }
 }
