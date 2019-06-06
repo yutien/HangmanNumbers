@@ -12,7 +12,7 @@
 <input type="text"      class="Text"    id="n2"         value="?" readonly></input>
 <input type="text"      class="Text"    id="n3"         value="?" readonly></input>
 <span>=</span>
-<input type="text"      class="Text"    id="n4"         type="number"></input>
+<input type="text"      class="Text"    id="n4"         type="number" pattern="\d*"></input>
 <input type="button"    class="Button"  id="btnOkay"    value="Okay" disabled></input>
 <BR>
 <img id="myImg" src="v0.png">
@@ -22,19 +22,21 @@ function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min) ) + min;
 }
 
+var maxValue = 100;
 function setBgPosition() {
     function run() {
-        var v1 = getRndInteger(1, 100);
-        var v2 = getRndInteger(1, 100);
-        var v3 = getRndInteger(1, 100 - v1);
-        
-        $('#n1').val(v1);
+        var v1 = getRndInteger(1, maxValue);
+        var v2 = getRndInteger(1, 10);
+        var v3 = 0;
         if((v2 % 2) == 0) {
             $('#n2').val('+');
+            v3 = getRndInteger(1, maxValue - v1);
         }
         else{
             $('#n2').val('-');
+            v3 = getRndInteger(1, v1);
         }
+        $('#n1').val(v1);
         $('#n3').val(v3);
     }
     return setInterval(run, 100);
