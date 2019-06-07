@@ -1,21 +1,77 @@
 <meta name="viewport" content="width=device-width">
 
-<link rel="stylesheet" type="text/css" id="defaultCSS" href="default.css"></link>
 <script type="text/javascript" language="javascript" src="jquery-3.4.1.js"></script>
 
-<div>
+<div style="width: 100%; color: purple; background: pink; display: flex; flex-direction: column; justify-content: center; text-align: center;">
     <h1>Hangman Numbers</h1>
 </div>
 <BR>
-<input type="button"    class="Button"  id="btnStart"   value="Start"></input>
-<input type="text"      class="Text"    id="n1"         value="?" readonly></input>
-<input type="text"      class="Text"    id="n2"         value="?" readonly></input>
-<input type="text"      class="Text"    id="n3"         value="?" readonly></input>
-<span>=</span>
-<input type="number"    class="Text"    id="n4"         pattern="[0-9]*"></input>
-<input type="button"    class="Button"  id="btnOkay"    value="Okay" disabled></input>
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 0px; vertical-align: bottom;">
+            <span id="lblMsg"
+                  style="width: 100%; font-size: 18px; padding: 20px; display: none;">
+            </span>
+            <img id="myImg" src="v0.png">
+        </td>
+        <td style="width: 100%; vertical-align: text-top;">
+            <input type="button" id="btnStart" value="Start" 
+                   style="width: 100%; height: 64px; font-size: 28px;">
+            </input>
+            <table border="0" 
+                   style="width: 100%; margin-top: 20px;">
+                <tr>
+                    <td style="width: 30%; text-align: right;">
+                    </td>
+                    <td style="width: 30%; text-align: right;">
+                        <input type="text" id="n1" value="?" readonly
+                               style="width: 100%; font-size: 32px; text-align: right; border: 0px;">
+                        </input>
+                    </td>
+                    <td style="width: 40%; text-align: right;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 30%; text-align: right;">
+                        <input type="text" id="n2" value="?" readonly
+                               style="width: 100%; font-size: 32px; text-align: right; border: 0px;">
+                        </input>
+                    </td>
+                    <td style="width: 30%; text-align: right;">
+                        <input type="text" id="n3" value="?" readonly
+                               style="width: 100%; font-size: 32px; text-align: right; border: 0px;">
+                        </input>
+                    </td>
+                    <td style="width: 40%; text-align: right;">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <hr>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 30%; text-align: right;">
+                        <input type="text" value="=" readonly
+                               style="width: 100%; font-size: 32px; text-align: right; border: 0px;">
+                        </input>
+                    </td>
+                    <td style="width: 30%; text-align: right;">
+                        <input type="number" id="n4" pattern="[0-9]*"
+                               style="width: 100%; height: 64px; font-size: 32px; text-align: right;">
+                        </input>
+                    </td>
+                    <td style="width: 40%; text-align: right;">
+                        <input type="button" id="btnOkay" value="Okay" disabled
+                               style="width: 100%; height: 64px; font-size: 28px;">
+                        </input>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 <BR>
-<img id="myImg" src="v0.png">
 
 <script>
 function getRndInteger(min, max) {
@@ -39,7 +95,7 @@ function setBgPosition() {
         $('#n1').val(v1);
         $('#n3').val(v3);
     }
-    return setInterval(run, 100);
+    return setInterval(run, 80);
 }
 
 var timer = null;
@@ -65,9 +121,13 @@ $('#btnStart').click(function(){
 });
 
 function RightAnswer() {
-    alert('Good Job!')
+    $('#lblMsg').text('Good Job!');
+    $('#lblMsg').show(1000).css('background', '#ccffff').css('color', '#6633ff');
     $('#btnStart').prop('disabled', false);
-    $('#btnStart').click();
+    setTimeout(function(){ 
+        $('#lblMsg').hide();
+        $('#btnStart').click();
+    }, 3000);
 }
 
 var numberOfWrong = 0;
@@ -75,14 +135,15 @@ function WrongAnswer() {
     numberOfWrong ++;
     $('#myImg').attr('src', 'v' + numberOfWrong + '.png');
     
-    $('#n4').val('');
-    $('#n4').focus();
-    alert('Good try, please try again!');
+    $('#n4').focus().val('');
+    $('#lblMsg').text('Good try, please try again!');
+    $('#lblMsg').show(1000).css('background', '#ffff99').css('color', '#ff0033');
     if(numberOfWrong >= 6) {
         $('#btnStart').prop('disabled', false);
         $('#btnStart').val('Restart');
         $('#btnOkay').prop('disabled', true);
     }
+    setTimeout(function(){ $('#lblMsg').hide(); }, 3000);
 }
 
 $('#btnOkay').click(function(){
