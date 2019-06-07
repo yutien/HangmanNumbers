@@ -10,9 +10,9 @@
     <tr>
         <td style="width: 0px; vertical-align: bottom;">
             <span id="lblMsg"
-                  style="width: 100%; font-size: 18px; padding: 20px; display: none;">
+                  style="width: 100px; font-size: 18px; padding: 20px; display: none;">
             </span>
-            <img id="myImg" src="v0.png">
+            <img id="myImg" src="v0.png" style="width: 150px;">
         </td>
         <td style="width: 100%; vertical-align: text-top;">
             <input type="button" id="btnStart" value="Start" 
@@ -34,7 +34,7 @@
                 <tr>
                     <td style="width: 30%; text-align: right;">
                         <input type="text" id="n2" value="?" readonly
-                               style="width: 100%; font-size: 32px; text-align: right; border: 0px;">
+                               style="width: 100%; font-size: 32px; text-align: right; border: 0px; padding-right: 20px;">
                         </input>
                     </td>
                     <td style="width: 30%; text-align: right;">
@@ -43,6 +43,9 @@
                         </input>
                     </td>
                     <td style="width: 40%; text-align: right;">
+                        <input type="button" id="btnHint1" value="Hint"
+                               style="width: 100%; height: 32px; font-size: 18px; display: none;">
+                        </input>
                     </td>
                 </tr>
                 <tr>
@@ -50,6 +53,62 @@
                         <hr>
                     </td>
                 </tr>
+                <tr>
+                    <td id="tdHint1" colspan="3" style="display: none;">
+                        <table border="0" 
+                               style="width: 100%; margin-top: 10px;">
+                            <tr>
+                                <td style="width: 30%; text-align: right;">
+                                </td>
+                                <td style="width: 10%; text-align: right;">
+                                    <input type="text" id="n11" value="?" readonly
+                                           style="width: 100%; font-size: 32px; text-align: right; border: 0px;">
+                                    </input>
+                                </td>
+                                <td style="width: 10%; text-align: right;">
+                                    <input type="text" value="+" readonly
+                                           style="width: 100%; font-size: 32px; text-align: right; border: 0px;">
+                                    </input>
+                                </td>
+                                <td style="width: 10%; text-align: right;">
+                                    <input type="text" id="n12" value="?" readonly
+                                           style="width: 100%; font-size: 32px; text-align: right; border: 0px;">
+                                    </input>
+                                </td>
+                                <td style="width: 40%; text-align: right;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 30%; text-align: right;">
+                                    <input type="text" id="n21" value="?" readonly
+                                           style="width: 100%; font-size: 32px; text-align: right; border: 0px; padding-right: 20px;">
+                                    </input>
+                                </td>
+                                <td style="width: 10%; text-align: right;">
+                                    <input type="text" id="n31" value="?" readonly
+                                           style="width: 100%; font-size: 32px; text-align: right; border: 0px;">
+                                    </input>
+                                </td>
+                                <td style="width: 10%; text-align: right;">
+                                    <input type="text" value="+" readonly
+                                           style="width: 100%; font-size: 32px; text-align: right; border: 0px;">
+                                    </input>
+                                </td>
+                                <td style="width: 10%; text-align: right;">
+                                    <input type="text" id="n32" value="?" readonly
+                                           style="width: 100%; font-size: 32px; text-align: right; border: 0px;">
+                                    </input>
+                                </td>
+                                <td style="width: 40%; text-align: right;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <hr>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
                 <tr>
                     <td style="width: 30%; text-align: right;">
                         <input type="text" value="=" readonly
@@ -86,14 +145,36 @@ function setBgPosition() {
         var v3 = 0;
         if((v2 % 2) == 0) {
             $('#n2').val('+');
+            $('#n21').val('+');
             v3 = getRndInteger(1, maxValue - v1);
         }
         else{
             $('#n2').val('-');
+            $('#n21').val('-');
             v3 = getRndInteger(1, v1);
         }
         $('#n1').val(v1);
         $('#n3').val(v3);
+        
+        if(parseInt(v1) < 10) {
+            $('#n11').val('');
+            $('#n12').val(v1);
+        }
+        else {
+            var tmp = parseInt(v1);
+            $('#n11').val(tmp - (tmp % 10));
+            $('#n12').val(tmp % 10);
+        }
+        
+        if(parseInt(v3) < 10) {
+            $('#n31').val('');
+            $('#n32').val(v3);
+        }
+        else{
+            var tmp = parseInt(v3);
+            $('#n31').val(tmp - (tmp % 10));
+            $('#n32').val(tmp % 10);
+        }
     }
     return setInterval(run, 80);
 }
@@ -110,6 +191,8 @@ $('#btnStart').click(function(){
         $('#n4').val('');
         $('#btnStart').val('Stop');
         $('#btnOkay').prop('disabled', true);
+        $('#btnHint1').hide();
+        $('#tdHint1').hide();
     }
     else {
         clearInterval(timer);
@@ -117,16 +200,18 @@ $('#btnStart').click(function(){
         $('#btnStart').val('Start').prop('disabled', true);
         $('#btnOkay').prop('disabled', false);
         $('#n4').focus();
+        $('#btnHint1').show();
     }
 });
 
 function RightAnswer() {
     $('#lblMsg').text('Good Job!');
     $('#lblMsg').show(1000).css('background', '#ccffff').css('color', '#6633ff');
-    $('#btnStart').prop('disabled', false);
+
     setTimeout(function(){ 
         $('#lblMsg').hide();
-        $('#btnStart').click();
+
+        $('#btnStart').click().prop('disabled', false);
     }, 3000);
 }
 
@@ -135,18 +220,31 @@ function WrongAnswer() {
     numberOfWrong ++;
     $('#myImg').attr('src', 'v' + numberOfWrong + '.png');
     
-    $('#n4').focus().val('');
-    $('#lblMsg').text('Good try, please try again!');
+    $('#lblMsg').text('Good try!');
     $('#lblMsg').show(1000).css('background', '#ffff99').css('color', '#ff0033');
-    if(numberOfWrong >= 6) {
-        $('#btnStart').prop('disabled', false);
-        $('#btnStart').val('Restart');
-        $('#btnOkay').prop('disabled', true);
-    }
-    setTimeout(function(){ $('#lblMsg').hide(); }, 3000);
+    setTimeout(function(){ 
+        $('#lblMsg').hide();
+
+        if(numberOfWrong < 6) {
+            $('#n4').focus().val('');
+        }
+        else {
+            $('#btnStart').val('Restart').prop('disabled', false);
+            $('#btnOkay').prop('disabled', true);
+        }
+    }, 3000);
 }
 
+$('#btnHint1').click(function(){
+    $('#tdHint1').show();
+});
+
 $('#btnOkay').click(function(){
+    if($('#n4').val() == '') {
+        $('#n4').focus();
+        return;
+    }
+
     var n1 = parseInt($('#n1').val());
     var n2 = $('#n2').val();
     var n3 = parseInt($('#n3').val());
