@@ -2,18 +2,18 @@
 
 <script type="text/javascript" language="javascript" src="jquery-3.4.1.js"></script>
 
-<div style="width: 100%; color: purple; background: pink; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+<div style="width: 100%; color: purple; background: pink; display: flex; justify-content: center; text-align: center;">
     <h1>Hangman Numbers</h1>
 </div>
 <BR>
 <table style="width: 100%;">
     <tr>
         <td style="width: 0%; vertical-align: bottom;">
-            <div id="divMsg" style="width: 100%; flex-direction: column; justify-content: center; text-align: center;">
+            <div id="divMsg" style="width: 100%; justify-content: center; text-align: center;">
                 <span id="lblMsg" style="font-size: 18px;">
                 </span>
-            </div>            
-            <img id="myImg" src="v0.png">
+            </div>
+            <img id="myImg" src="v0.png" style="width: 100px;">
             </img>
         </td>
         <td style="width: 100%; vertical-align: text-top;">
@@ -23,25 +23,25 @@
             <table border="0" 
                    style="width: 100%; margin-top: 20px;">
                 <tr>
-                    <td style="width: 30%; text-align: right;">
+                    <td style="width: 20%; text-align: right;">
                     </td>
-                    <td style="width: 30%; text-align: right;">
+                    <td style="width: 40%; text-align: right;">
                         <input type="text" id="n1" value="?" readonly
-                               style="width: 100px; font-size: 64px; text-align: right; border: 0px;">
+                               style="width: 100px; font-size: 48px; text-align: right; border: 0px;">
                         </input>
                     </td>
                     <td style="width: 40%; text-align: right;">
                     </td>
                 </tr>
                 <tr>
-                    <td style="width: 30%; text-align: right;">
+                    <td style="width: 20%; text-align: left;">
                         <input type="text" id="n2" value="?" readonly
-                               style="width: 50px; font-size: 64px; text-align: right; border: 0px;">
+                               style="width: 50px; font-size: 32px; text-align: right; border: 0px;">
                         </input>
                     </td>
-                    <td style="width: 30%; text-align: right;">
+                    <td style="width: 40%; text-align: right;">
                         <input type="text" id="n3" value="?" readonly
-                               style="width: 100px; font-size: 64px; text-align: right; border: 0px;">
+                               style="width: 100px; font-size: 48px; text-align: right; border: 0px;">
                         </input>
                     </td>
                     <td style="width: 40%; text-align: right;">
@@ -57,20 +57,28 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="width: 30%; text-align: right;">
+                    <td style="width: 20%; text-align: right;">
                         <input type="text" value="=" readonly
-                               style="width: 50px; font-size: 64px; text-align: right; border: 0px;">
+                               style="width: 50px; font-size: 20px; text-align: right; border: 0px;">
                         </input>
                     </td>
-                    <td style="width: 30%; text-align: right;">
+                    <td style="width: 40%; text-align: right;">
                         <input type="number" id="n4" pattern="[0-9]*"
-                               style="width: 130px; height: 80px; font-size: 60px; text-align: right;">
+                               style="width: 100px; height: 60px; font-size: 32px; text-align: right;">
                         </input>
                     </td>
                     <td style="width: 40%; text-align: right;">
                         <input type="button" id="btnOkay" value="Okay" disabled
-                               style="width: 100%; height: 80px; font-size: 28px;">
+                               style="width: 100%; height: 60px; font-size: 20px;">
                         </input>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div style="width: 100%; justify-content: right; text-align: right; margin-top: 10px;">
+                            <span id="lblPoints" style="font-size: 20px;">You have ? point(s).
+                            </span>
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -78,14 +86,13 @@
     </tr>
 </table>
 
-
 <script>
 function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min) ) + min;
 }
 
 var maxValue = 100;
-function setBgPosition() {
+function GetQuestion() {
     function run() {
         var v1 = getRndInteger(1, maxValue);
         var v2 = getRndInteger(1, 10);
@@ -134,7 +141,8 @@ $('#btnStart').click(function(){
             $('#myImg').attr('src', 'v0.png');
         }
     
-        timer = setBgPosition();
+        $('#lblPoints').text('You have ' + yourPoints + ' point(s).');
+        timer = GetQuestion();
         $('#n4').val('');
         $('#btnStart').val('Stop');
         $('#btnOkay').prop('disabled', true);
@@ -148,7 +156,9 @@ $('#btnStart').click(function(){
     }
 });
 
+var yourPoints = 0;
 function RightAnswer() {
+    yourPoints = yourPoints + 5;
     $('#lblMsg').text('Good Job!');
     $('#divMsg').show(1000).css('background', '#ccffff').css('color', '#6633ff');
 
@@ -156,7 +166,7 @@ function RightAnswer() {
         $('#divMsg').hide();
 
         $('#btnStart').click().prop('disabled', false);
-    }, 3000);
+    }, 2000);
 }
 
 var numberOfWrong = 0;
@@ -170,13 +180,14 @@ function WrongAnswer() {
         $('#divMsg').hide();
 
         if(numberOfWrong < 6) {
-            $('#n4').focus().val('');
+            $('#n4').val('');
         }
         else {
+            yourPoints = 0;
             $('#btnStart').val('Restart').prop('disabled', false);
             $('#btnOkay').prop('disabled', true);
         }
-    }, 3000);
+    }, 2000);
 }
 
 $('#btnOkay').click(function(){
